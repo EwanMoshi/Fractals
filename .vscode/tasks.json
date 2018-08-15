@@ -6,7 +6,7 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "-g", "Bitmap.cpp", "Main.cpp"
+                "-g", "Mandelbrot.cpp", "Bitmap.cpp", "Main.cpp"
             ],
             "group": {
                 "kind": "build",

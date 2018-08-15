@@ -52,7 +52,16 @@ bool Bitmap::Write(string FileName) {
 }
 
 void Bitmap::SetPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
+    // get a pointer to our pPixels unique ptr array
+    uint8_t* pPixel = pPixels.get();
 
+    // each pixel takes up 3 bytes (rgb)
+    pPixel += (y * 3) * Width + (x * 3);
+
+    // reversed because bitmap little endian format
+    pPixel[0] = b;
+    pPixel[1] = g;
+    pPixel[2] = r;
 }
 
 }
