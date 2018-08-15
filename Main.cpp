@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cstdint>
+#include <memory>
+#include <math.h>
 
 #include "Bitmap.h"
 #include "Mandelbrot.h"
@@ -16,32 +18,57 @@ int main() {
     double min = 999999;
     double max = -999999;
 
+    unique_ptr<int[]> Histogram(new int[Mandelbrot::MAX_ITERATIONS]{0});
+    unique_ptr<int[]> FractalImage(new int[WIDTH * HEIGHT]{0});
+
+    // store number of iterations per pixel
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
             double xFractal = (x - WIDTH / 2 - 200) * 2.0 / HEIGHT;
             double yFractal = (y - HEIGHT / 2) * 2.0 / HEIGHT;
 
             int Iterations = Mandelbrot::GetIterations(xFractal, yFractal);
-
-            uint8_t color = static_cast<uint8_t>(256 * static_cast<double>(Iterations) / Mandelbrot::MAX_ITERATIONS);
             
-            color = color * color * color;
+            FractalImage[y * WIDTH + x] = Iterations;
 
-            bitmap.SetPixel(x, y, 0, color, 0);
-
-            if (xFractal < min) {
-                min = color;
-            }
-
-            if (xFractal > max ) {
-                max = color;
+            // keep track of how many pixels have this number of Iterations
+            if (Iterations != Mandelbrot::MAX_ITERATIONS) {
+                Histogram[Iterations]++;
             }
         }
     }
 
-    cout << min << ", " << max << endl;
+    int Total = 0;
+    for (int i = 0; i < Mandelbrot::MAX_ITERATIONS; i++) {
+        Total += Histogram[i];
+    }
 
-    bitmap.Write("test.bmp");
+    // draw the fractal
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            uint8_t red = 0;
+            uint8_t green = 0;
+            uint8_t blue = 0;
+            
+            int Iterations = FractalImage[y * WIDTH + x];
+
+            if (Iterations != Mandelbrot::MAX_ITERATIONS) {
+                double Hue = 0.0;
+                for (int i = 0; i <= Iterations; i++) {
+                    Hue += static_cast<double>(Histogram[i]) / Total;
+                }
+
+                green = pow(255, Hue);
+            }
+
+
+            bitmap.SetPixel(x, y, red, green, blue);
+
+        }
+    }
+
+
+    bitmap.Write("MandelbrotFractal.bmp");
 
     cout << "Finished Writing" << endl;
     return 0;
