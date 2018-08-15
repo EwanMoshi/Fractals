@@ -6,7 +6,7 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "-g", "Main.cpp"
+                "-g", "Bitmap.cpp", "Main.cpp"
             ],
             "group": {
                 "kind": "build",

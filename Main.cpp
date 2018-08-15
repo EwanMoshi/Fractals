@@ -1,10 +1,14 @@
 #include <iostream>
-#include "BitmapFileHeader.h"
-#include "BitmapInfoHeader.h"
+#include "Bitmap.h"
 
 using namespace std;
+using namespace Fractals;
 
 int main() {
-    cout << "asd" << endl;
+    Bitmap bitmap(800, 600);
+
+    bitmap.Write("test.bmp");
+
+    cout << "Finished Writing" << endl;
     return 0;
 }
