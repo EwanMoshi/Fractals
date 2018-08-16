@@ -5,6 +5,8 @@
 
 #include "Bitmap.h"
 #include "Mandelbrot.h"
+#include "ZoomList.h"
+#include "FractalMaker.h"
 
 using namespace std;
 using namespace Fractals;
@@ -18,16 +20,20 @@ int main() {
     double min = 999999;
     double max = -999999;
 
+    ZoomList Zoom_List(WIDTH, HEIGHT);
+    Zoom_List.Add(Zoom(WIDTH / 2, HEIGHT / 2, 4.0 / WIDTH));
+    Zoom_List.Add(Zoom(295, HEIGHT - 202, 0.1));
+    Zoom_List.Add(Zoom(312, HEIGHT - 304, 0.1));
+
     unique_ptr<int[]> Histogram(new int[Mandelbrot::MAX_ITERATIONS]{0});
     unique_ptr<int[]> FractalImage(new int[WIDTH * HEIGHT]{0});
 
     // store number of iterations per pixel
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
-            double xFractal = (x - WIDTH / 2 - 200) * 2.0 / HEIGHT;
-            double yFractal = (y - HEIGHT / 2) * 2.0 / HEIGHT;
-
-            int Iterations = Mandelbrot::GetIterations(xFractal, yFractal);
+            pair<double, double> coords = Zoom_List.ZoomIn(x, y);
+            
+            int Iterations = Mandelbrot::GetIterations(coords.first, coords.second);
             
             FractalImage[y * WIDTH + x] = Iterations;
 
@@ -58,7 +64,7 @@ int main() {
                     Hue += static_cast<double>(Histogram[i]) / Total;
                 }
 
-                green = pow(255, Hue);
+                green = Hue * 255;
             }
 
 
