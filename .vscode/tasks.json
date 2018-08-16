@@ -6,7 +6,7 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "-g", "FractalMaker.cpp", "ZoomList.cpp", "Mandelbrot.cpp", "Bitmap.cpp", "Main.cpp"
+                "-g", "RGB.cpp", "FractalMaker.cpp", "ZoomList.cpp", "Mandelbrot.cpp", "Bitmap.cpp", "Main.cpp"
             ],
             "group": {
                 "kind": "build",
