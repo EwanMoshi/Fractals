@@ -1,4 +1,9 @@
+#include <iostream>
+#include <assert.h>
+
 #include "FractalMaker.h"
+
+using namespace std;
 
 namespace Fractals {
 
@@ -20,6 +25,9 @@ void FractalMaker::Run(string name) {
 
     // calculate total iterations
     CalculateTotalIterations();
+
+    // helper function
+    CalculateRangeTotals();
 
     // draw the fractal image
     DrawFractal();
@@ -50,33 +58,45 @@ void FractalMaker::CalculateTotalIterations() {
     for (int i = 0; i < Mandelbrot::MAX_ITERATIONS; i++) {
         Total += Histogram[i];
     }
+
+    cout << "Total : " << Total << endl;
 }
 
 
 void FractalMaker::DrawFractal() {
-    RGB StartColor(0, 00, 0);
-    RGB EndColor(0, 0, 255);
-    RGB ColorDiff = EndColor - StartColor;
-
    // draw the fractal
     for (int y = 0; y < Height; y++) {
         for (int x = 0; x < Width; x++) {
+            int Iterations = FractalImage[y * Width + x];
+
+            // find color range that we're in
+            int Range = GetRange(Iterations);
+            int RangeRotal = RangeTotals[Range];
+
+            // get nubmer of iterations for the start range
+            int RangeStart = Ranges[Range];
+
+            // get the start and end color for this range
+            RGB& StartColor = Colors[Range];
+            RGB& EndColor = Colors[Range + 1];
+
+            // get the color difference between the start and end color
+            RGB ColorDifference = EndColor - StartColor;
+
             uint8_t r = 0;
             uint8_t g = 0;
             uint8_t b = 0;
             
-            int Iterations = FractalImage[y * Width + x];
-
             if (Iterations != Mandelbrot::MAX_ITERATIONS) {
-                double Hue = 0.0;
-                for (int i = 0; i <= Iterations; i++) {
-                    Hue += static_cast<double>(Histogram[i]) / Total;
+                int TotalPixels = 0;
+
+                for (int i = RangeStart; i <= Iterations; i++) {
+                    TotalPixels += Histogram[i];
                 }
 
-                r = StartColor.r + ColorDiff.r * Hue;
-                g = StartColor.g + ColorDiff.g * Hue;
-                b = StartColor.b + ColorDiff.b * Hue;
-
+                r = StartColor.r + ColorDifference.r * (double) TotalPixels / RangeRotal;
+                g = StartColor.g + ColorDifference.g * (double) TotalPixels / RangeRotal;
+                b = StartColor.b + ColorDifference.b * (double) TotalPixels / RangeRotal;
             }
 
 
@@ -96,6 +116,58 @@ void FractalMaker::AddZoom(const Zoom& Zoom) {
 void FractalMaker::AddColorRange(const RGB& color, double EndRange) {
     Colors.push_back(color);
     Ranges.push_back(EndRange * Mandelbrot::MAX_ITERATIONS);
+
+    if (bHasFirstRange) {
+        RangeTotals.push_back(0);
+    }
+
+    bHasFirstRange = true;
+
+
 }
+
+void FractalMaker::CalculateRangeTotals() {
+    int Index = 0;
+
+    for (int i = 0; i < Mandelbrot::MAX_ITERATIONS; i++) {
+        int Pixels = Histogram[i];
+
+        if (i >= Ranges[Index + 1]) {
+            Index++;
+        }
+
+        RangeTotals[Index] += Pixels;
+    }
+
+    int overall = 0;
+
+    for (int value : RangeTotals) {
+        cout << "Range Total: " << value << endl;
+        overall += value;
+    }
+
+    cout << "overall : " << overall << endl;
+}
+
+int FractalMaker::GetRange(int Iterations) const {
+    int range = 0;
+
+    // find the range for the given Iterations
+    for (int i = 1; i < Ranges.size(); i ++) {
+        range = i;
+
+        if (Ranges[i] > Iterations) {
+            break;
+        }
+    }
+
+    range--;
+
+    assert(range > -1);
+    assert(range < Ranges.size());
+
+    return range;
+}
+
 
 }

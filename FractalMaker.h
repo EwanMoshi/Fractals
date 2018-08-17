@@ -36,11 +36,16 @@ private:
     int Total = 0;
     vector<int> Ranges;
     vector<RGB> Colors;
+    vector<int> RangeTotals;
+    
+    bool bHasFirstRange = false;
 
     void CalculateIteration();
     void DrawFractal();
     void WriteBitmap(string FileName);
     void CalculateTotalIterations();
+    void CalculateRangeTotals();
+    int GetRange(int Iterations) const;
 };
 
 }

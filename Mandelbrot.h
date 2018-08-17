@@ -11,7 +11,7 @@ public:
     static int GetIterations(double x, double y);
 
     // the number of iterations for each pixel
-    static const int MAX_ITERATIONS = 1000;
+    static const int MAX_ITERATIONS = 10000;
 };
 
 }
