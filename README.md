@@ -1,6 +1,6 @@
 ## Fractal Output
-![alt text](https://ibb.co/h8ZydK)
-![alt text](https://ibb.co/gL2vQz)
-![alt text](https://ibb.co/i2yfse)
-![alt text](https://ibb.co/bsLtCe)
-![alt text](https://ibb.co/gB0FQz)
+![alt text](https://github.com/EwanMoshi/Fractals/blob/master/MandelbrotColorRange1.bmp)
+![alt text](https://github.com/EwanMoshi/Fractals/blob/master/MandelbrotFractal2.bmp)
+![alt text](https://github.com/EwanMoshi/Fractals/blob/master/MandelRanged2.bmp)
+![alt text](https://github.com/EwanMoshi/Fractals/blob/master/test.bmp)
+![alt text](https://github.com/EwanMoshi/Fractals/blob/master/MandelbrotFractalZoomed1.bmp)
