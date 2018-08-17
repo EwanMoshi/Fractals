@@ -1,6 +1,6 @@
 ## Fractal Output
 ![Image1](MandelbrotColorRange1.bmp)
-![alt text](https://github.com/EwanMoshi/Fractals/blob/master/MandelbrotFractal2.bmp)
-![alt text](https://github.com/EwanMoshi/Fractals/blob/master/MandelRanged2.bmp)
-![alt text](https://github.com/EwanMoshi/Fractals/blob/master/test.bmp)
-![alt text](https://github.com/EwanMoshi/Fractals/blob/master/MandelbrotFractalZoomed1.bmp)
+![Image2](MandelbrotFractal2.bmp)
+![Image3](MandelRanged2.bmp)
+![Image4](test.bmp)
+![Image5](MandelbrotFractalZoomed1.bmp)
